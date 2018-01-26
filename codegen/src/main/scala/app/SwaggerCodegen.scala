@@ -1,12 +1,12 @@
 // scalafmt: { maxColumn = 120 }
 package app
 
-import io.swagger.parser.SwaggerParser
-import io.swagger.models.Model
-import io.swagger.models.ComposedModel
-import io.swagger.models.RefModel
-import io.swagger.models.Swagger
-import io.swagger.models.parameters._
+import v2.io.swagger.parser.SwaggerParser
+import v2.io.swagger.models.Model
+import v2.io.swagger.models.ComposedModel
+import v2.io.swagger.models.RefModel
+import v2.io.swagger.models.Swagger
+import v2.io.swagger.models.parameters._
 
 import scala.collection.JavaConversions._
 import better.files._
@@ -14,11 +14,11 @@ import java.io.{File => JFile}
 import java.time.OffsetDateTime
 
 import app.swagger.ModelsGen
-import io.swagger.annotations.ApiKeyAuthDefinition
-import io.swagger.models.auth.In
-import io.swagger.models.properties.ArrayProperty
-import io.swagger.models.properties.Property
-import io.swagger.models.properties.RefProperty
+import v2.io.swagger.annotations.ApiKeyAuthDefinition
+import v2.io.swagger.models.auth.In
+import v2.io.swagger.models.properties.ArrayProperty
+import v2.io.swagger.models.properties.Property
+import v2.io.swagger.models.properties.RefProperty
 import utils.CaseClassMetaHelper
 import utils.ScalaFmtHelper
 
@@ -244,7 +244,7 @@ object SwaggerCodegen extends App {
                   }).flatten
 
                   val keyDef: Option[String] = security match {
-                    case Some((name, e: _root_.io.swagger.models.auth.ApiKeyAuthDefinition)) =>
+                    case Some((name, e: _root_.v2.io.swagger.models.auth.ApiKeyAuthDefinition)) =>
                       e.getIn match {
                         case In.HEADER =>
                           Some(s"""val optApiKey = request.headers.get("${e.getName}")""")
@@ -262,7 +262,7 @@ object SwaggerCodegen extends App {
                     }
 
                   val (queryParameterStr, hasQueryApiKey) = security match {
-                    case Some((name, e: _root_.io.swagger.models.auth.ApiKeyAuthDefinition)) =>
+                    case Some((name, e: _root_.v2.io.swagger.models.auth.ApiKeyAuthDefinition)) =>
                       e.getIn match {
                         case In.QUERY =>
                           (baseQueryParameter + s""" ? q_o"${e.getName}=$$optApiKey"""", true)
@@ -329,7 +329,7 @@ object SwaggerCodegen extends App {
                         s"${e.getName}: Option[$tpe]"
                       }
                     } ++ (security match { // Add security specific parameters
-                    case Some((name, e: _root_.io.swagger.models.auth.ApiKeyAuthDefinition)) =>
+                    case Some((name, e: v2.io.swagger.models.auth.ApiKeyAuthDefinition)) =>
                       Seq("apiKey: String")
                     case _ =>
                       Seq.empty

@@ -18,6 +18,6 @@ addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.+")
 
 addSbtPlugin("com.typesafe.sbt" % "sbt-gzip" % "1.0.+")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.6.+")
+addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.9.+")
 
-addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.6.+")
+addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.9.+")

@@ -8,8 +8,7 @@ import bay.driver.CustomizedPgDriver
 import better.files._
 import com.typesafe.config.ConfigFactory
 import org.flywaydb.core.Flyway
-import utils.CaseClassMetaHelper
-import utils.ScalaFmtHelper
+import utils.{CaseClassMetaHelper, ScalaFmtHelper}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
@@ -23,7 +22,7 @@ object DbCodegen extends App {
   println("Using Configuration File: " + configFile.pathAsString)
   val config = ConfigFactory.parseFile(configFile.toJava).resolve()
 
-  println("# Starting databse codegeneration")
+  println("# Starting database codegeneration")
   for {
     dbConfig <- config.getObject("slick.dbs")
   } yield {
