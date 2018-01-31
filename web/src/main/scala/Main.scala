@@ -10,7 +10,6 @@ import scala.scalajs.js.JSApp
 
 object Main extends JSApp with UpickleCodecs {
   val regExRoute = "[a-zA-Z0-9_-]+"
-
   def main(): Unit = {
     println("Application starting..")
 

@@ -21,7 +21,7 @@ class Application(val controllerComponents: ControllerComponents,
 
   def index(path: String) = security.optUserIdAction { implicit request =>
     request.userId match {
-      case Some(_) =>
+      case Some(u) =>
         Ok(views.html.index())
       case None =>
         Ok(views.html.login(loginForm.fill(LoginForm("test@test.de", "testpw"))))
@@ -42,7 +42,7 @@ class Application(val controllerComponents: ControllerComponents,
       userId <- services.userDao.maybeLogin(form) |> HttpResult.fromFOption(
         BadRequest(views.html.login(loginForm.fill(form).withGlobalError("bad.password"))))
     } yield
-      Redirect(routes.Application.index("/"))
+      Redirect(routes.Application.index(""))
         .withSession(request.session + (security.sessionKey -> userId.toString))
 
     constructResult(result)

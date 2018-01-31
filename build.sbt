@@ -12,7 +12,7 @@ resolvers in ThisBuild ++= Seq(Resolver.bintrayRepo("scalameta", "maven"), Resol
 lazy val web = (project in file("web"))
   .settings(
     scalaJSUseMainModuleInitializer := true,
-    webpackBundlingMode := BundlingMode.LibraryOnly(),
+    webpackBundlingMode := BundlingMode.LibraryAndApplication(),
     emitSourceMaps := false,
     webpackConfigFile in fullOptJS := Some(baseDirectory.value / "prod.webpack.config.js"),
     libraryDependencies ++= Seq(
@@ -53,9 +53,23 @@ lazy val codegen = (project in file("codegen"))
     "org.scalameta" %% "scalameta" % scalaMeta,
     "com.geirsson" %% "scalafmt-core" % scalaFmt,
     "com.github.pathikrit" %% "better-files" % betterFiles,
-    "io.swagger" % "swagger-parser" % swaggerParser
+    "io.swagger" % "swagger-parser" % 	swaggerParser//TODO
+
   ))
   .dependsOn(dbdriver)
+
+lazy val xcodegen = (project in file("xcodegen"))
+  .settings(libraryDependencies ++= Seq(
+    //"io.swagger" % "swagger-core" % 	"1.5.18",
+    //"io.swagger" % "swagger-parser" % 	"1.0.34"
+    "io.swagger" % "swagger-codegen" % 	"2.3.1"
+  ))
+
+lazy val `xcodegen-run` = (project in file("xcodegen-run"))
+  .settings(libraryDependencies ++= Seq(
+    "io.swagger" % "swagger-codegen-cli" % 	"2.3.1"
+  ))
+  .dependsOn(xcodegen)
 
 lazy val server = (project in file("server"))
   .settings(
@@ -65,7 +79,7 @@ lazy val server = (project in file("server"))
     libraryDependencies ++= Seq(
       filters,
       jdbc,
-      cache,
+      ehcache,
       ws,
       "com.github.t3hnar" %% "scala-bcrypt" % bcrypt,
       "com.typesafe.slick" %% "slick" % slick,
@@ -80,10 +94,13 @@ lazy val server = (project in file("server"))
     ),
     scalaJSProjects := Seq(web),
     pipelineStages in Assets := Seq(scalaJSPipeline, digest, gzip),
-    routesGenerator := InjectedRoutesGenerator
+    routesGenerator := InjectedRoutesGenerator,
+    PlayKeys.playMonitoredFiles ++= (sourceDirectories in (Compile, TwirlKeys.compileTemplates)).value
   )
   .dependsOn(dbdriver, dbschema)
+  .disablePlugins(PlayLayoutPlugin)
   .enablePlugins(PlayScala, SbtWeb, WebScalaJSBundlerPlugin, DockerPlugin, JavaServerAppPackaging)
+
 
 lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
   .settings(libraryDependencies ++= Seq(

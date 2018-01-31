@@ -2,7 +2,7 @@ package app.swagger
 
 import app.SwaggerCodegen.property2Scala
 import better.files.File
-import v2.io.swagger.models.Swagger
+import io.swagger.models.Swagger
 import utils.CaseClassMetaHelper
 import utils.ScalaFmtHelper
 import scala.meta._

@@ -1,26 +1,26 @@
-import v2.io.swagger.models.{ArrayModel, ComposedModel, RefModel}
+import io.swagger.models.{ArrayModel, ComposedModel, RefModel}
 
 package object app {
-  implicit class ExtParamater(e: v2.io.swagger.models.parameters.Parameter) {
+  implicit class ExtParamater(e: io.swagger.models.parameters.Parameter) {
     def getType: Option[String] = e match {
-      case e: v2.io.swagger.models.parameters.PathParameter => Some(e.getType)
-      case e: v2.io.swagger.models.parameters.BodyParameter =>
+      case e: io.swagger.models.parameters.PathParameter => Some(e.getType)
+      case e: io.swagger.models.parameters.BodyParameter =>
         e.getSchema match {
           case am: ArrayModel                  => None // TODO
           case e: ComposedModel                => None
           case ref: RefModel                   => Some(ref.getSimpleRef)
-          case mi: v2.io.swagger.models.ModelImpl => Some(mi.getType)
+          case mi: io.swagger.models.ModelImpl => Some(mi.getType)
         }
       case _ => None
     }
 
     def getFormat: Option[String] = e match {
-      case e: v2.io.swagger.models.parameters.PathParameter => Some(e.getFormat)
-      case e: v2.io.swagger.models.parameters.BodyParameter =>
+      case e: io.swagger.models.parameters.PathParameter => Some(e.getFormat)
+      case e: io.swagger.models.parameters.BodyParameter =>
         e.getSchema match {
           case am: ArrayModel                  => None // TODO
           case e: ComposedModel                => None
-          case mi: v2.io.swagger.models.ModelImpl => Some(mi.getFormat)
+          case mi: io.swagger.models.ModelImpl => Some(mi.getFormat)
         }
       case _ => None
     }

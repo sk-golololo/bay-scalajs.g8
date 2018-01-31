@@ -1,27 +1,19 @@
 // scalafmt: { maxColumn = 160, align.tokens = ["="] }
 
-import akka.actor.ActorSystem
 import bay.driver.CustomizedPgDriver
 import com.softwaremill.macwire._
-import controllers.Application
-import controllers.AssetsComponents
-import controllers.Security
+import controllers._
+import controllers.swagger.v1.petstore.{PetRouter, StoreRouter, UserRouter}
 import play.api.ApplicationLoader.Context
-import play.api.BuiltInComponentsFromContext
-import play.api.LoggerConfigurator
-import play.api.db.DBComponents
-import play.api.db.HikariCPComponents
-import play.api.db.slick.DbName
-import play.api.db.slick.SlickComponents
+import play.api.db.slick.{DbName, SlickComponents}
+import play.api.db.{DBComponents, HikariCPComponents}
 import play.api.i18n.I18nComponents
-import play.api.mvc.BodyParsers
-import play.api.mvc.EssentialFilter
-import play.api.mvc.PlayBodyParsers
+import play.api.mvc.{BodyParsers, EssentialFilter}
 import play.api.routing.Router
-import play.filters.cors.CORSConfig
-import play.filters.cors.CORSFilter
-import play.filters.gzip.GzipFilter
-import play.filters.gzip.GzipFilterConfig
+import play.api.{BuiltInComponentsFromContext, LoggerConfigurator}
+import play.filters.cors.{CORSConfig, CORSFilter}
+import play.filters.gzip.{GzipFilter, GzipFilterConfig}
+import play.api.routing.Router
 import router.Routes
 import services.Services
 import services.dao.UserDao
@@ -67,6 +59,11 @@ class ApplicationComponents(context: Context)
    */
   lazy val security: Security         = wire[Security]
   lazy val appController: Application = wire[Application]
+
+  lazy val petRouter: PetRouter = wire[PetRouterImpl]
+  lazy val storeRouter: StoreRouter = wire[StoreRouterImpl]
+  lazy val userRouter: UserRouter = wire[UserRouterImpl]
+
 
   /*
    * ROUTES

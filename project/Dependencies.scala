@@ -28,5 +28,5 @@ object Dependencies {
   val flyway = "5.0.6" // https://flywaydb.org/documentation/api/
   val scalaMeta = "1.7.0" // https://github.com/scalameta/scalameta
   val scalaFmt = "1.4.0" // https://github.com/olafurpg/scalafmt
-  val swaggerParser = "2.0.0-rc1" // https://github.com/swagger-api/swagger-parser
+  val swaggerParser = "1.0.33" // https://github.com/swagger-api/swagger-parser
 }
