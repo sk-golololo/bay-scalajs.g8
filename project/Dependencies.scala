@@ -22,7 +22,7 @@ object Dependencies {
   val upickle = "0.4.4" // http://www.lihaoyi.com/upickle-pprint/upickle/
   val cats = "1.0.1" // https://github.com/typelevel/cats
   val scalaJavaTime = "2.0.0-M12" // https://github.com/cquiroz/scala-java-time
-  val circeVersion = "0.9.0" // https://circe.github.io/circe
+  val circeVersion = "0.9.1" // https://circe.github.io/circe
 
   // Codegen only
   val flyway = "5.0.6" // https://flywaydb.org/documentation/api/

@@ -1,0 +1,53 @@
+package {{package}}
+
+import io.circe._, io.circe.generic.semiauto._, io.circe.java8.time._
+import cats.syntax.either._
+
+{{#imports}}import {{import}}
+{{/imports}}
+import {{classname}}._
+
+{{#models}}
+{{#model}}
+
+case class {{classname}} (
+  {{#vars}}
+    {{name}}: {{^required}}Option[{{/required}}{{^isEnum}}{{datatype}}{{/isEnum}}{{#isEnum}}{{datatypeWithEnum}}{{/isEnum}}{{^required}}]{{/required}}{{#hasMore}},{{/hasMore}}{{^hasMore}}){{/hasMore}}
+  {{/vars}}
+
+object {{classname}} {
+  {{#hasEnums}}
+  {{#vars}}
+  {{#isEnum}}
+  sealed trait {{datatypeWithEnum}}
+  {{#_enum}}
+  case object {{#fnEnumEntry}}{{.}}{{/fnEnumEntry}} extends {{datatypeWithEnum}}
+  {{/_enum}}
+
+  object {{datatypeWithEnum}} {
+    implicit val {{datatypeWithEnum}}Encoder: Encoder[{{datatypeWithEnum}}] = {
+      Encoder.encodeString.contramap[{{datatypeWithEnum}}]{
+      {{#_enum}}
+        case {{#fnEnumEntry}}{{.}}{{/fnEnumEntry}} => "{{.}}"
+      {{/_enum}}
+      }
+    }
+
+    implicit val {{datatypeWithEnum}}Decoder: Decoder[{{datatypeWithEnum}}] = {
+      Decoder.decodeString.emap {
+        {{#_enum}}
+        case "{{.}}" => Right({{#fnEnumEntry}}{{.}}{{/fnEnumEntry}})
+        {{/_enum}}
+        case _ => Left("")
+      }
+    }
+  }
+  {{/isEnum}}
+  {{/vars}}
+  {{/hasEnums}}
+
+  implicit val decoder: Decoder[{{classname}}] = deriveDecoder[{{classname}}]
+  implicit val encoder: ObjectEncoder[{{classname}}] = deriveEncoder[{{classname}}]
+}
+{{/model}}
+{{/models}}

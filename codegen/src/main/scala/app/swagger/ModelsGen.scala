@@ -15,7 +15,7 @@ import app._
 object ModelsGen {
   def gen(swagger: Swagger, apiVersion: String, f: File): Unit = {
     println(s"- Starting Models Generator for ${f.pathAsString}")
-    val modelsFolder = file"shared/src/main/scala/shared/models/swagger/${f.nameWithoutExtension}/$apiVersion"
+    val modelsFolder = file"shared/src/main/scala/models/swagger/${f.nameWithoutExtension}/$apiVersion"
 
     swagger.getDefinitions.toVector.foreach {
       case (name, model) =>
