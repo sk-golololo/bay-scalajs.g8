@@ -23,3 +23,6 @@ addSbtPlugin("ch.epfl.scala" % "sbt-scalajs-bundler" % "0.9.+")
 addSbtPlugin("ch.epfl.scala" % "sbt-web-scalajs-bundler" % "0.9.+")
 
 addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.9.0")
+
+addSbtPlugin("com.lightbend.lagom" % "lagom-sbt-plugin" % "1.4.0")
+

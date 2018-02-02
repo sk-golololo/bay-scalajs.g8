@@ -1,9 +1,10 @@
 // scalafmt: { maxColumn = 160, align.tokens = ["="] }
 
 import bay.driver.CustomizedPgDriver
+import com.lightbend.lagom.internal.scaladsl.server.ScaladslServiceRouter
 import com.softwaremill.macwire._
 import controllers._
-import controllers.swagger.v1.petstore.{PetRouter, StoreRouter, UserRouter}
+import controllers.swagger._
 import play.api.ApplicationLoader.Context
 import play.api.db.slick.{DbName, SlickComponents}
 import play.api.db.{DBComponents, HikariCPComponents}
@@ -13,8 +14,6 @@ import play.api.routing.Router
 import play.api.{BuiltInComponentsFromContext, LoggerConfigurator}
 import play.filters.cors.{CORSConfig, CORSFilter}
 import play.filters.gzip.{GzipFilter, GzipFilterConfig}
-import play.api.routing.Router
-import router.Routes
 import services.Services
 import services.dao.UserDao
 import slick.basic.DatabaseConfig
@@ -60,9 +59,13 @@ class ApplicationComponents(context: Context)
   lazy val security: Security         = wire[Security]
   lazy val appController: Application = wire[Application]
 
-  lazy val petRouter: PetRouter = wire[PetRouterImpl]
-  lazy val storeRouter: StoreRouter = wire[StoreRouterImpl]
-  lazy val userRouter: UserRouter = wire[UserRouterImpl]
+  lazy val petService: PetService = wire[PetServiceImpl]
+  lazy val storeService: StoreService = wire[StoreServiceImpl]
+  lazy val userService: UserService = wire[UserServiceImpl]
+
+
+
+
 
 
   /*
@@ -73,4 +76,14 @@ class ApplicationComponents(context: Context)
     val prefix: String = "/"
     wire[Routes]
   }
+
+    lazy val petController: controllers.PetRouter0 = wire[controllers.PetRouter0]
+  //  lazy val userController: UserRou
+  // ter = wire[UserRouter]
+  //  lazy val storeController: StoreRouter = wire[StoreRouter]
+
+//  lazy val petRouter: Router = new ScaladslServiceRouter(petController.descriptor, petService, httpConfiguration)
+//  val storeRouter: Router = new ScaladslServiceRouter(storeController.descriptor, storeService, httpConfiguration)
+//  val userRouter: Router = new ScaladslServiceRouter(userController.descriptor, userService, httpConfiguration)
+
 }

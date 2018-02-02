@@ -9,7 +9,7 @@ object Run {
       Array("generate",
         "-l", "XCodegen",
 //        "-supporting-files",
-        "--api-package", "controllers",
+        "--api-package", "controllers.swagger",
         "-i", "http://petstore.swagger.io/v2/swagger.json"
       ))
 

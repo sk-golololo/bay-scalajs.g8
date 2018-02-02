@@ -36,7 +36,8 @@ public class XCodegen extends AbstractScalaCodegen implements CodegenConfig {
         super();
         outputFolder = "generated-code/XCodegen";
         modelTemplateFiles.put("model.mustache", ".scala");
-        apiTemplateFiles.put("api.mustache", ".scala");
+        apiTemplateFiles.put("api.mustache", "Router.scala");
+        apiTemplateFiles.put("service.mustache", "Service.scala");
 
         templateDir = "XCodegen";
         apiPackage = "controllers.swagger";
@@ -112,12 +113,16 @@ public class XCodegen extends AbstractScalaCodegen implements CodegenConfig {
     @Override
     public void processOpts() {
         super.processOpts();
-        //supportingFiles.add(new SupportingFile("dateTimeCodecs.mustache",  "/shared/" + SRC_MAIN_SCALA + "/" + modelPackage().replace('.', File.separatorChar), "DateTimeCodecs.scala"));
+        supportingFiles.add(new SupportingFile("package.mustache",  "/server/" + SRC_MAIN_SCALA + "/" + apiPackage().replace('.', File.separatorChar), "package.scala"));
     }
 
     @Override
     public String apiFileFolder() {
         return outputFolder + "/server/" + SRC_MAIN_SCALA + "/" + apiPackage().replace('.', File.separatorChar);
+    }
+
+    public String toApiName(String name) {
+        return name.length() == 0 ? "Default" : camelize(name);
     }
 
     public String modelFileFolder() {

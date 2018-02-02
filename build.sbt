@@ -71,6 +71,19 @@ lazy val `xcodegen-run` = (project in file("xcodegen-run"))
   ))
   .dependsOn(xcodegen)
 
+lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
+  .settings(libraryDependencies ++= Seq(
+    "de.daxten" %%% "autowire" % autowire,
+    "org.typelevel" %%% "cats-core" % cats,
+    "io.circe" %%% "circe-core" % circeVersion,
+    "io.circe" %%% "circe-generic" % circeVersion,
+    "io.circe" %%% "circe-parser" % circeVersion,
+    "io.circe" %%% "circe-java8" % circeVersion,
+    "com.lihaoyi" %%% "upickle" % upickle
+  ))
+  .jsConfigure(_.enablePlugins(ScalaJSPlugin))
+  .jsSettings()
+
 lazy val server = (project in file("server"))
   .settings(
     name := (name in ThisBuild).value,
@@ -90,35 +103,22 @@ lazy val server = (project in file("server"))
       "com.softwaremill.macwire" %% "macros" % macwire % "provided",
       "com.softwaremill.macwire" %% "macrosakka" % macwire % "provided",
       "com.softwaremill.macwire" %% "util" % macwire,
-      "com.softwaremill.macwire" %% "proxy" % macwire
+      "com.softwaremill.macwire" %% "proxy" % macwire,
+      lagomScaladslApi,
+      lagomScaladslServer,
+
     ),
     scalaJSProjects := Seq(web),
     pipelineStages in Assets := Seq(scalaJSPipeline, digest, gzip),
     routesGenerator := InjectedRoutesGenerator,
     PlayKeys.playMonitoredFiles ++= (sourceDirectories in (Compile, TwirlKeys.compileTemplates)).value
   )
-  .dependsOn(dbdriver, dbschema)
+  .dependsOn(dbdriver, dbschema, sharedJVM)
   .disablePlugins(PlayLayoutPlugin)
   .enablePlugins(PlayScala, SbtWeb, WebScalaJSBundlerPlugin, DockerPlugin, JavaServerAppPackaging)
 
-
-lazy val shared = (crossProject.crossType(CrossType.Pure) in file("shared"))
-  .settings(libraryDependencies ++= Seq(
-    "de.daxten" %%% "autowire" % autowire,
-    "org.typelevel" %%% "cats-core" % cats,
-    "io.circe" %%% "circe-core" % circeVersion,
-    "io.circe" %%% "circe-generic" % circeVersion,
-    "io.circe" %%% "circe-parser" % circeVersion,
-    "io.circe" %%% "circe-java8" % circeVersion,
-    "com.lihaoyi" %%% "upickle" % upickle
-  ))
-  .jsConfigure(_.enablePlugins(ScalaJSPlugin))
-  .jsSettings()
-
 lazy val sharedJVM = shared.jvm
-
 lazy val sharedJS = shared.js
-
 
 onLoad in Global ~= (_ andThen ("project server" :: _))
 
